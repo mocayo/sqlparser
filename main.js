@@ -5,6 +5,7 @@
 
 let Pre = require('./pre.js');
 let Tokenizer = require("./tokenizer");
+let Lexer = require('./lexer');
 
 // queries
 let query1 = `SELECT id, name, dept, score
@@ -24,9 +25,11 @@ WHERE s. > 90;`;
 
 let p = new Pre();
 let t = new Tokenizer();
+let lexer = new Lexer();
 
 function ast(q) {
-  let s = p.pre(q);
+  let s = lexer.lex(q);
+  console.log(lexer.pre(q));
   console.log(s);
 }
 
