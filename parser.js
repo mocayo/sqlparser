@@ -2,6 +2,15 @@
  * parser
  */
 
+class Ans {
+  set(k, v) {
+    this[k] = v;
+  }
+  get(k) {
+    return this[k];
+  }
+}
+
 class Parser {
 
   /**
@@ -11,7 +20,7 @@ class Parser {
    */
   select(words) {
     while(words.shift() != 'select') {};
-    let ans = new Map();
+    let ans = new Ans();
     ans.set('statement', 'select');
     let fields = [];
     let from_flag = false;
@@ -35,7 +44,7 @@ class Parser {
       }
       // 检查field格式
       if (field.match(/\w+\.$/) || field.match(/$\.\w+/) || '.' === field) {
-        throw `field error at ${i}, shouldn't be '${words[i]}'`;
+        throw `field error, shouldn't be '${words[i]}'`;
       }
       cols.push(field);
     }
@@ -47,13 +56,13 @@ class Parser {
   /**
    * from 语句
    * @param  {Array} words 词组
-   * @param  {Map} ans   已解析的信息
-   * @return {Map}       sql信息
+   * @param  {Ans} ans   已解析的信息
+   * @return {Ans}       sql信息
    */
   from(words, ans) {
     while (words.shift() != 'from') {};
     let tables = [];
-    let alias_table_map = new Map();
+    let alias_table_map = new Ans();
     let br = 0;
     let where_flag = false;
     let order_flag = false;
@@ -71,13 +80,14 @@ class Parser {
         tables.push(words[i]);
         br = 1;
       } else if (br == 1) {
-        alias_table_map.set(words[i - 1], words[i]);
+        alias_table_map.set(words[i], words[i - 1]);
         br = 0;
       } else {}
       if (',' === words[i]) br = 0;
     }
     ans.set('tablesinfo', tables);
     ans.set('alias_table_map', alias_table_map);
+    // console.log(alias_table_map);
     if (where_flag) {
       return this.where(words, ans);
     } else if (order_flag) {
@@ -88,18 +98,18 @@ class Parser {
   /**
    * where 语句
    * @param  {Array} words 词组
-   * @param  {Map} ans   已解析的信息
-   * @return {Map}       sql信息
+   * @param  {Ans} ans   已解析的信息
+   * @return {Ans}       sql信息
    */
   where(words, ans) {
     while (words.shift() != 'where') {};
     let conditions = [];
     let br = 0;
-    let c = new Map();
+    let c = new Ans();
     let order_flag = false;
     let alias = [];
     if (ans.get('alias_table_map')) {
-      for (let v of ans.get('alias_table_map').values()) {
+      for (let v of Object.keys(ans.get('alias_table_map'))) {
         alias.push(v);
       }
     }
@@ -113,11 +123,11 @@ class Parser {
         if (words[i].match(/\w+\.\w+/)) {
           let _alia = words[i].split('.')[0];
           if (!alias.includes(_alia))
-            throw `aliaa ${_alia} undefined at col ${i}!`;
+            throw `alia ${_alia} undefined!`;
         }
         // 检查left格式
         if (words[i].match(/\w+\.$/) || words[i].match(/$\.\w+/) || '.' === words[i]) {
-          throw `the left of condition error at ${i}, shouldn't be '${words[i]}'`;
+          throw `the left of condition error, shouldn't be "${words[i]}"`;
         }
         c.set('left', words[i]);
         br = 1;
@@ -145,27 +155,21 @@ class Parser {
             }
             let subwords = words.slice(i + 1, j);
             subwords.push(';');
-            console.log('*********************');
+            // console.log('*********************');
             let subans = this.parse(subwords);
-            let subObj = new Object();
-            for (let [k, v] of subans) {
-              subObj[k] = v;
-            }
-            console.log(subObj);
-            console.log(JSON.stringify(subObj));
-            console.log(subans);
+            // console.log(subans);
             c.set('right', subans);
-            console.log('*********************');
+            // console.log('*********************');
             i = j;
             if (words[i] == ')') i++;
           } else {
-            throw `'(' without ')' matched at ${i}`;
+            throw `'(' without ')' matched`;
           }
         } else {
           c.set('right', words[i]);
         }
-        conditions.push(new Map(c));
-        c.clear();
+        conditions.push(c);
+        c = new Ans();
         br = 0;
       } else {}
       if ('and' === words[i]) br = 0;
@@ -178,8 +182,8 @@ class Parser {
   /**
    * order by 语句
    * @param  {Array} words 词组
-   * @param  {Map} ans   已解析的信息
-   * @return {Map}       sql信息
+   * @param  {Ans} ans   已解析的信息
+   * @return {Ans}       sql信息
    */
   order_by(words, ans) {
     return ans;
@@ -188,16 +192,14 @@ class Parser {
   /**
    * 语法分析
    * @param  {Array} words 词组
-   * @return {Map}       sql信息
+   * @return {Ans}       sql信息
    */
   parse(words) {
-    console.log(words);
     switch(words[0]) {
       case 'select':
         return this.select(words);
       default:
-        return;
-        // throw "only support select now!";
+        throw "only support select now!";
     }
   }
 

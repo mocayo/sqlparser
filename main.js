@@ -22,25 +22,25 @@ let query4 = `SELECT *
 FROM Student s
 WHERE s. > 90;`;
 
-let query5 = `SELECT dept
-    FROM Student
-    WHERE name='张三';`;
-
 let lexer = new Lexer();
 let parser = new Parser();
 
 function ast(q) {
   try {
-    let ans;
     let words = lexer.lex(q);
+    let ans = parser.parse(words);
+    console.log('-----original sql-----');
     console.log(q);
-    console.log(parser.parse(words));
-    console.log('----------')
+    console.log('------parse sql-------');
+    console.log(JSON.stringify(ans));
+    console.log('----------------------');
   } catch (e) {
     console.log(e);
   }
 
 }
 
-// ast(query1);
+ast(query1);
+ast(query2);
 ast(query3);
+ast(query4);
