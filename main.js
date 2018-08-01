@@ -1,5 +1,5 @@
 /**
- * index
+ * main
  * 入口
  */
 
@@ -22,13 +22,17 @@ let query4 = `SELECT *
 FROM Student s
 WHERE s. > 90;`;
 
+let query5 = `SELECT dept
+    FROM Student
+    WHERE name='张三';`;
+
 let lexer = new Lexer();
 let parser = new Parser();
 
 function ast(q) {
-  let words = lexer.lex(q);
-  let ans;
   try {
+    let ans;
+    let words = lexer.lex(q);
     console.log(q);
     console.log(parser.parse(words));
     console.log('----------')
@@ -38,5 +42,5 @@ function ast(q) {
 
 }
 
-ast(query1);
-ast(query2);
+// ast(query1);
+ast(query3);
