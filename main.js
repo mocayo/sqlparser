@@ -26,15 +26,15 @@ let lexer = new Lexer();
 let parser = new Parser();
 
 function ast(q) {
+  console.log('-----original sql-----');
+  console.log(q);
   try {
     let words = lexer.lex(q);
     let ans = parser.parse(words);
-    console.log('-----original sql-----');
-    console.log(q);
     console.log('------parse sql-------');
     console.log(JSON.stringify(ans));
-    console.log('----------------------');
   } catch (e) {
+    console.log('------sql error-------');
     console.log(e);
   }
 
