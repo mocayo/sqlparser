@@ -1,7 +1,6 @@
 /**
- * parser
+ * sql 信息
  */
-
 class Ans {
   set(k, v) {
     this[k] = v;
@@ -11,6 +10,9 @@ class Ans {
   }
 }
 
+/**
+ * parser
+ */
 class Parser {
 
   /**
