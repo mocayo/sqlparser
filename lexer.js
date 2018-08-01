@@ -18,6 +18,12 @@ class Lexer {
     s = s.replace(/\)/g, ' ) ');
     // 处理字段之间的','
     s = s.replace(/,/g, ' , ');
+    // 处理结束符号';'
+    if (s.match(/;/g).length > 1) {
+      throw "Illegal char ; at " + q.indexOf(';');
+    } else {
+      s = s.replace(';', ' ; ');
+    }
     // 处理多余空格' +'
     s = s.replace(/ +/g, ' ');
     return s;
@@ -33,7 +39,7 @@ class Lexer {
   }
 
   lex(q) {
-    return this.split(this.pre(q));
+    return this.split(this.pre(q)).map(x => x.toLowerCase());
   }
 
 }

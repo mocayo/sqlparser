@@ -3,9 +3,8 @@
  * 入口
  */
 
-let Pre = require('./pre.js');
-let Tokenizer = require("./tokenizer");
 let Lexer = require('./lexer');
+let Parser = require('./parser');
 
 // queries
 let query1 = `SELECT id, name, dept, score
@@ -23,14 +22,21 @@ let query4 = `SELECT *
 FROM Student s
 WHERE s. > 90;`;
 
-let p = new Pre();
-let t = new Tokenizer();
 let lexer = new Lexer();
+let parser = new Parser();
 
 function ast(q) {
-  let s = lexer.lex(q);
-  console.log(lexer.pre(q));
-  console.log(s);
+  let words = lexer.lex(q);
+  let ans;
+  try {
+    console.log(q);
+    console.log(parser.parse(words));
+    console.log('----------')
+  } catch (e) {
+    console.log(e);
+  }
+
 }
 
 ast(query1);
+ast(query2);
