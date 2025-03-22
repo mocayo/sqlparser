@@ -3,8 +3,7 @@
  * 入口
  */
 
-let Lexer = require('./lexer');
-let Parser = require('./parser');
+let { Lexer, Parser } = require('../src');
 
 // queries
 let query1 = `SELECT id, name, dept, score

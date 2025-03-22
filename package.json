@@ -1,0 +1,15 @@
+{
+  "name": "@mocayo/sqlparser",
+  "version": "1.0.0",
+  "description": "play sqlparser",
+  "author": "mocayo",
+  "files": ["src"],
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "repository": "https://github.com/mocayo/sqlparser.git",
+  "scripts": {
+    "test": "exit 0",
+    "demo": "node ./examples/main.js"
+  },
+  "license": "MIT"
+}
