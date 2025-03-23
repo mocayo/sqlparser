@@ -1,8 +1,9 @@
 {
   "name": "@mocayo/sqlparser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "play sqlparser",
   "author": "mocayo",
+  "license": "MIT",
   "files": ["src"],
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -11,5 +12,8 @@
     "test": "exit 0",
     "demo": "node ./examples/main.js"
   },
-  "license": "MIT"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }
